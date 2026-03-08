@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <title>ប្រព័ន្ធបោះឆ្នោតឌីជីថល</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>សូមជ្រើសរើសបេក្ខជនដែលអ្នកពេញចិត្ត</h1>
+
+    <div id="candidate-list" class="grid-container">
+    </div>
+
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h3>បញ្ជាក់ការបោះឆ្នោត</h3>
+            <p id="confirmText"></p>
+            <div class="btn-group">
+                <button onclick="closeModal()" class="btn-cancel">បោះបង់</button>
+                <button id="finalVoteBtn" class="btn-confirm">យល់ព្រមបោះឆ្នោត</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="successArea" class="success-box" style="display:none;">
+        <h2>🎉 ការបោះឆ្នោតជោគជ័យ!</h2>
+        <p>សូមរក្សាទុកលេខបង្កាន់ដៃ (Receipt Token) របស់អ្នក៖</p>
+        <div class="token-display" id="receiptToken"></div>
+        <button onclick="window.location.reload()" class="btn-back">ត្រឡប់ក្រោយ</button>
+    </div>
+</div>
+<script src="../static/js/script.js"></script>
+</body>
+</html>
