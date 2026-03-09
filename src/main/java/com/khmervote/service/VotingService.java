@@ -31,13 +31,15 @@ public class VotingService {
     public String castVote(Long voterId, Long candidateId) {
 
         Voter voter = voterRepository.findById(voterId)
-                .orElseThrow(() -> new RuntimeException("រកមិនឃើញអ្នកបោះឆ្នោត!"));
+                .orElseThrow(() -> new RuntimeException("Voter not found!"));
 
-        if (voter.isHasVoted()) {
-            throw new RuntimeException("កំហុស៖ អ្នកបានបោះឆ្នោតរួចរាល់ហើយ!");
+        if (Boolean.TRUE.equals(voter.getVoted())) {
+            throw new RuntimeException("You have already voted!");
         }
+        voterRepository.save(voter);
+        voter.setVoted(true);
 
-        voter.setHasVoted(true);
+        voter.getVoted();
         voterRepository.save(voter);
 
         String previousHash = voteRepository.findTopByOrderByIdDesc()

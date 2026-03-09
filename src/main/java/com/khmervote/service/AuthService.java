@@ -30,6 +30,9 @@ public class AuthService {
         voter.setRole("ROLE_VOTER");
         voter.setPassword(passwordEncoder.encode(voter.getPassword()));
         voter.setVerified(false);
+        voter.setVoted(false);
+        voter.setLocked(false);
+        voter.setFailedAttempts(0);
         Voter savedVoter = voterRepository.save(voter);
 
         String otpCode = String.valueOf((int)((Math.random() * 900000) + 100000));

@@ -38,7 +38,7 @@ public class VoterUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return !voter.isLocked();
+        return voter.getLocked() ==null || !voter.getLocked();
     }
 
     @Override
@@ -48,8 +48,7 @@ public class VoterUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-
-        return voter.isVerified();
+        return voter.getVerified() != null && voter.getVerified();
     }
 
     public Long getVoterId() {

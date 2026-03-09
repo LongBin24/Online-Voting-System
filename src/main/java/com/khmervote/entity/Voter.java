@@ -29,13 +29,13 @@ public class Voter {
     private String password;
 
     @Column(name = "has_voted")
-    private Boolean hasVoted = false;
+    private Boolean Voted = false;
 
     @Column(name = "is_verified")
-    private Boolean isVerified = false;
+    private Boolean Verified = false;
 
     @Column(name = "is_locked")
-    private Boolean isLocked = false;
+    private Boolean Locked = false;
 
     @Column(name = "failed_attempts")
     private Integer failedAttempts = 0;
