@@ -18,20 +18,37 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                         .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable())
 
-                        .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register", "/verify", "/api/auth/**", "/css/**", "/js/**").permitAll()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/register", "/verify", "/login","/api/auth/**", "/css/**", "/js/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/votes/**").hasRole("VOTER")
+                        .requestMatchers("/api/votes/**","/ballot").hasRole("VOTER")
                         .anyRequest().authenticated()
                 )
-                        .formLogin(form -> form
+                .formLogin(form -> form
                         .loginPage("/login").permitAll()
                         .defaultSuccessUrl("/ballot", true)
                 )
-                .logout(logout -> logout.permitAll());
 
+                .logout(logout -> logout.permitAll())
+                .formLogin(form -> form
+                .loginPage("/login").permitAll()
+                .successHandler((request, response, authentication) -> {
+                    var roles = authentication.getAuthorities();
+                    if (roles.stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
+                        response.sendRedirect("/admin/dashboard");
+                    } else {
+                        response.sendRedirect("/ballot");
+                    }
+                })
+
+                .permitAll()
+        )
+         .logout(logout -> logout
+                .logoutSuccessUrl("/login?logout")
+                .permitAll()
+        );
         return http.build();
     }
 

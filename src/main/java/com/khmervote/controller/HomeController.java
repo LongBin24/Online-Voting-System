@@ -27,4 +27,8 @@ public class HomeController {
     public String verifyPage() {
         return "verify";
     }
+    @GetMapping("/admin/dashboard")
+    public String admindashboard(){
+        return "amin-candidates";
+    }
 }

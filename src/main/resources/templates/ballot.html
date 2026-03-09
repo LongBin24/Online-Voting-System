@@ -6,6 +6,10 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+<div th:if="${#authorization.expression('hasRole(''ADMIN'')')}" style="margin-bottom: 20px; padding: 10px; background: #fff3f3; border: 1px solid red; border-radius: 5px;">
+    <span style="color: #721c24;">របៀបវារៈអ្នកគ្រប់គ្រង៖ </span>
+    <a href="/admin/dashboard" style="color: red; font-weight: bold; text-decoration: none;">[ ចូលទៅកាន់ Admin Panel ]</a>
+</div>
 <div class="container">
     <h1>សូមជ្រើសរើសបេក្ខជនដែលអ្នកពេញចិត្ត</h1>
 
