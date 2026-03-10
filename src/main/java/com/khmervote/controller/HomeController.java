@@ -29,6 +29,6 @@ public class HomeController {
     }
     @GetMapping("/admin/dashboard")
     public String admindashboard(){
-        return "amin-candidates";
+        return "admin-candidates";
     }
 }

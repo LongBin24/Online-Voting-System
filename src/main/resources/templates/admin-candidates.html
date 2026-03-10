@@ -1,5 +1,13 @@
+<!DOCTYPE html>
+<html lang="km" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel - Candidate Management</title>
+    <link rel="stylesheet" th:href="@{/css/adminstyle.css}">
+</head>
+<body>
 <div class="admin-container">
-    <h2>គ្រប់គ្រងបេក្ខជន</h2>
+    <h2>គ្រប់គ្រងបញ្ជីបេក្ខជន</h2>
 
     <div class="form-box">
         <input type="text" id="candName" placeholder="ឈ្មោះបេក្ខជន">
@@ -19,4 +27,23 @@
         <tbody id="candidateTableBody">
         </tbody>
     </table>
+
+    <hr style="margin: 40px 0;">
+
+    <h2> លទ្ធផលបោះឆ្នោតតាមគណបក្ស</h2>
+    <table class="styled-table results-table">
+        <thead>
+        <tr>
+            <th>គណបក្ស / បេក្ខជន</th>
+            <th>ចំនួនសម្លេងឆ្នោត</th>
+            <th>ភាគរយ (%)</th>
+        </tr>
+        </thead>
+        <tbody id="votingResultsBody">
+        </tbody>
+    </table>
 </div>
+
+<script th:src="@{/js/admin.js}"></script>
+</body>
+</html>
