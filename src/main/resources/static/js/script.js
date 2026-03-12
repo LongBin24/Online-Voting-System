@@ -1,80 +1,83 @@
-document.addEventListener('DOMContentLoaded', () => {
+window.confirmVote = function(id, name) {
+    window.selectedCandidateId = id;
+    document.getElementById('confirmText').innerText = `Are you sure you want to vote for: ${name}?`;
+    document.getElementById('confirmModal').style.display = 'block';
+};
 
-    let selectedCandidateId = null;
+window.closeModal = function() {
+    document.getElementById('confirmModal').style.display = 'none';
+};
 
-    window.confirmVote = function(id, name) {
-        selectedCandidateId = id;
-        document.getElementById('confirmText').innerText = `តើអ្នកប្រាកដទេថានឹងបោះឆ្នោតឱ្យបេក្ខជន៖ ${name}?`;
-        document.getElementById('confirmModal').style.display = 'block';
-    };
+async function loadCandidates() {
+    try {
+        const response = await fetch('/api/votes/candidates');
 
-    window.closeModal = function() {
-        document.getElementById('confirmModal').style.display = 'none';
-    };
-
-    async function submitVote() {
-        const btn = document.getElementById('finalVoteBtn');
-        btn.disabled = true;
-        btn.innerText = "កំពុងរក្សាទុក...";
-
-        try {
-            const response = await fetch('/api/votes/cast', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ candidateId: selectedCandidateId })
-            });
-
-            const contentType = response.headers.get("content-type");
-            if (contentType && contentType.indexOf("application/json") !== -1) {
-                const data = await response.json();
-                if (response.ok && data.status === "success") {
-                    showSuccess(data.receiptToken);
-                } else {
-                    alert("កំហុស៖ " + data.message);
-                    closeModal();
-                }
-            } else {
-
-                alert("សូមចូលប្រើប្រាស់ប្រព័ន្ធ (Login) ជាមុនសិន!");
-                window.location.href = "/login";
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            alert("មិនអាចតភ្ជាប់ទៅកាន់ Server បានទេ!");
-        } finally {
-            btn.disabled = false;
-            btn.innerText = "យល់ព្រមបោះឆ្នោត";
+        if (!response.ok) {
+            throw new Error("Failed to load candidates (Status: " + response.status + ")");
         }
+
+        const candidates = await response.json();
+        const listDiv = document.getElementById('candidate-list');
+
+        if (listDiv) {
+            listDiv.innerHTML = '';
+
+            candidates.forEach(c => {
+                listDiv.innerHTML += `
+                    <div class="card">
+                        <h3>${c.name}</h3>
+                        <p>${c.party}</p>
+                        <button onclick="confirmVote(${c.id}, '${c.name}')" class="btn-vote">Vote Now</button>
+                    </div>`;
+            });
+        }
+    } catch (error) {
+        console.error("Error loading candidates:", error);
     }
+}
 
-    function showSuccess(token) {
-        document.getElementById('confirmModal').style.display = 'none';
-        document.getElementById('candidate-list').style.display = 'none';
-        document.querySelector('h1').style.display = 'none';
-        document.getElementById('successArea').style.display = 'block';
-        document.getElementById('receiptToken').innerText = token;
-    }
+async function submitVote() {
+    const btn = document.getElementById('finalVoteBtn');
+    btn.disabled = true;
+    btn.innerText = "Saving...";
 
-    const finalBtn = document.getElementById('finalVoteBtn');
-    if(finalBtn) {
-        finalBtn.addEventListener('click', submitVote);
-    }
-
-    const candidates = [
-        { id: 1, name: "លោក សុខ ជា", party: "គណបក្ស ក" },
-        { id: 2, name: "កញ្ញា ចាន់ ធី", party: "គណបក្ស ខ" }
-    ];
-
-    const listDiv = document.getElementById('candidate-list');
-    if(listDiv) {
-        candidates.forEach(c => {
-            listDiv.innerHTML += `
-                <div class="card">
-                    <h3>${c.name}</h3>
-                    <p>${c.party}</p>
-                    <button onclick="confirmVote(${c.id}, '${c.name}')" class="btn-vote">បោះឆ្នោត</button>
-                </div>
-            `;
+    try {
+        const response = await fetch('/api/votes/cast', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ candidateId: window.selectedCandidateId })
         });
+
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+            const data = await response.json();
+            if (response.ok && data.status === "success") {
+                showSuccess(data.receiptToken);
+            } else {
+                alert("Error: " + data.message);
+                closeModal();
+            }
+        } else {
+            alert("Please login first!");
+            window.location.href = "/login";
+        }
+    } catch (error) {
+        alert("Server connection failed!");
+    } finally {
+        btn.disabled = false;
+        btn.innerText = "Confirm Vote";
     }
+}
+
+function showSuccess(token) {
+    document.getElementById('confirmModal').style.display = 'none';
+    document.getElementById('candidate-list').style.display = 'none';
+    document.querySelector('h1').style.display = 'none';
+    document.getElementById('successArea').style.display = 'block';
+    document.getElementById('receiptToken').innerText = token;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadCandidates();
+    document.getElementById('finalVoteBtn').addEventListener('click', submitVote);
 });

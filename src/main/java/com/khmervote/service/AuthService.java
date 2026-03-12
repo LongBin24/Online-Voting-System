@@ -24,7 +24,7 @@ public class AuthService {
     public String registerVoter(Voter voter) {
 
         if(voterRepository.findByEmail(voter.getEmail()).isPresent()) {
-            throw new RuntimeException("This email is already registered!");
+            throw new RuntimeException("Email មួយនេះធ្លាប់បានចុះឈ្មោះរួចហើយ!!");
         }
 
         voter.setRole("ROLE_VOTER");
@@ -46,19 +46,19 @@ public class AuthService {
 
         emailService.sendVerificationEmail(voter.getEmail(), otpCode);
 
-        return "Registration successful! Please check your email for the verification code.";
+        return "ចុះឈ្មោះជោគជ័យ! សូមពិនិត្យមើលកូដ OTP ក្នុង Email របស់អ្នក";
     }
 
     @Transactional
     public String verifyAccount(String email, String code) {
         Voter voter = voterRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Voter not found!"));
+                .orElseThrow(() -> new RuntimeException("រកមិនឃើញអ្នកបោះឆ្នោតទេ!"));
 
         Verification v = verificationRepository.findByVoterIdAndCode(voter.getId(), code)
-                .orElseThrow(() -> new RuntimeException("Invalid verification code!"));
+                .orElseThrow(() -> new RuntimeException("កូដផ្ទៀងផ្ទាត់មិនត្រឹមត្រូវទេសូមពិនិត្យម្តងទៀត!"));
 
         if (v.getExpiry().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Verification code has expired!");
+            throw new RuntimeException("កូដផ្ទៀងផ្ទាត់មួយនេះបានផុតកំណត់ហើយ!");
         }
 
         voter.setVerified(true);
@@ -66,6 +66,6 @@ public class AuthService {
 
         verificationRepository.delete(v);
 
-        return "Your account has been successfully verified! You can now log in and vote.";
+        return "គណនីរបស់អ្នកត្រូវបានផ្ទៀងផ្ទាត់ដោយជោគជ័យ! ឥឡូវនេះអ្នកអាចចូលប្រើប្រាស់ និងបោះឆ្នោតបានហើយ!!";
     }
 }

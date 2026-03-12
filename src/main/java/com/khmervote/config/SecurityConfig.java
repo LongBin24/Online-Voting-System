@@ -24,6 +24,7 @@ public class SecurityConfig {
                         .requestMatchers("/register", "/verify", "/login","/api/auth/**", "/css/**", "/js/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/votes/**","/ballot").hasRole("VOTER")
+                        .requestMatchers("/api/votes/**").hasRole("VOTER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

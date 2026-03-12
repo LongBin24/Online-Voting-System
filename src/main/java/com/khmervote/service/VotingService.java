@@ -31,10 +31,10 @@ public class VotingService {
     public String castVote(Long voterId, Long candidateId) {
 
         Voter voter = voterRepository.findById(voterId)
-                .orElseThrow(() -> new RuntimeException("Voter not found!"));
+                .orElseThrow(() -> new RuntimeException("រកមិនឃើញអ្នកបោះឆ្នោតទេ!"));
 
         if (Boolean.TRUE.equals(voter.getVoted())) {
-            throw new RuntimeException("You have already voted!");
+            throw new RuntimeException("អ្នកបានបោះឆ្នោតរួចរាល់ហើយ មិនអាចបោះម្ដងទៀតបានទេ!");
         }
         voterRepository.save(voter);
         voter.setVoted(true);

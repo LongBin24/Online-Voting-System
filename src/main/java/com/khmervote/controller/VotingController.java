@@ -1,5 +1,7 @@
 package com.khmervote.controller;
 
+import com.khmervote.entity.Candidate;
+import com.khmervote.repository.CandidateRepository;
 import com.khmervote.security.VoterUserDetails;
 import com.khmervote.service.VotingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +9,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/votes")
 public class VotingController {
+
+    @Autowired
+    private CandidateRepository candidateRepository;
+
+    @GetMapping("/candidates")
+    public List<Candidate> getCandidatesForVoter() {
+        return candidateRepository.findAll();
+    }
 
     @Autowired
     private VotingService votingService;

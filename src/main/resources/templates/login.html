@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<!--xmlns:th="http://www.thymeleaf.org-->
 <head>
     <meta charset="UTF-8">
     <title>Login - Online Voting System</title>
@@ -17,19 +16,18 @@
 <body>
 <div class="login-card">
     <h2>Please Sign In</h2>
-
     <div th:if="${param.error}" class="error">
         Invalid email or password!
     </div>
 
     <form th:action="@{/login}" method="post">
-        <input type="email" name="username" placeholder="Email Address" required autofocus>
-        <input type="password" name="password" placeholder="Password" required>
+        <input type="email" name="username" placeholder="អាសយដ្ឋាន Email" required autofocus>
+        <input type="password" name="password" placeholder="ពាក្យសម្ងាត់" required>
         <button type="submit">Sign In</button>
     </form>
 
     <p style="margin-top: 15px; font-size: 14px;">
-        Don't have an account? <a href="./register">Register here</a>
+        តើអ្នកបានបង្កើតគណនីចុះឈ្មោះហើយឬនៅ? <a href="./register">កន្លែងចុះឈ្មោះ</a>
     </p>
 </div>
 </body>
