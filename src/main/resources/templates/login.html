@@ -21,8 +21,8 @@
     </div>
 
     <form th:action="@{/login}" method="post">
-        <input type="email" name="username" placeholder="អាសយដ្ឋាន Email" required autofocus>
-        <input type="password" name="password" placeholder="ពាក្យសម្ងាត់" required>
+        <input type="email" name="username" placeholder="អាសយដ្ឋាន Email" required autofocus autocomplete="off">
+        <input type="password" name="password" placeholder="ពាក្យសម្ងាត់" required autocomplete="new-password">
         <button type="submit">ចូលគណនី</button>
     </form>
 
