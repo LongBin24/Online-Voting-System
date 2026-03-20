@@ -15,7 +15,7 @@
 </head>
 <body>
 <div class="login-card">
-    <h2>Please Sign In</h2>
+    <h2>ចូលគណនី</h2>
     <div th:if="${param.error}" class="error">
         Invalid email or password!
     </div>
@@ -23,7 +23,7 @@
     <form th:action="@{/login}" method="post">
         <input type="email" name="username" placeholder="អាសយដ្ឋាន Email" required autofocus>
         <input type="password" name="password" placeholder="ពាក្យសម្ងាត់" required>
-        <button type="submit">Sign In</button>
+        <button type="submit">ចូលគណនី</button>
     </form>
 
     <p style="margin-top: 15px; font-size: 14px;">
