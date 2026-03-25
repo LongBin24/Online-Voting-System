@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verify Account</title>
+    <style>
+        .box { width: 300px; margin: 50px auto; text-align: center; font-family: sans-serif; }
+        input { width: 100%; padding: 10px; margin: 10px 0; }
+        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; }
+    </style>
+</head>
+<body>
+<div class="box">
+    <h2>ការផ្ទៀងផ្ទាត់គណនី</h2>
+    <p>សូមបញ្ចូលលេខកូដដែលបានផ្ញើទៅកាន់សារអ៊ីមែលរបស់អ្នក.</p>
+    <input type="email" id="email" placeholder="អាសយដ្ឋាន Email">
+    <input type="text" id="otpCode" placeholder="លេខកូដដែលគេផ្ញើ 6 ខ្ទង់">
+    <button onclick="handleVerify()">ផ្ទៀងផ្ទាត់ឥឡូវនេះ</button>
+</div>
+
+<script>
+    async function handleVerify() {
+        const email = document.getElementById('email').value;
+        const code = document.getElementById('otpCode').value;
+
+        const response = await fetch('/api/auth/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, code })
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            alert(result.message);
+            window.location.href = "/login";
+        } else {
+            alert("Error: " + result.error);
+        }
+    }
+</script>
+</body>
+</html>

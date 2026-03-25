@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - Khmer Vote</title>
+    <style>
+        body { font-family: 'Khmer OS Battambang', sans-serif; background: #f4f7f6; padding: 20px; }
+        .reg-box { display: flex; flex-direction:column; align-items: center; width: 300px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background: white; }
+        input { width: 100%; margin-bottom: 10px; padding: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; cursor: pointer; border-radius: 5px; }
+        button:hover { background: #218838; }
+        .login-link { margin-top: 20px; font-size: 14px; color: #666; text-align: center; }
+        .login-link a { color: #551A8B; text-decoration: none; font-weight: bold; }
+        .login-link a:hover { color: #0056b3; text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div class="reg-box">
+    <h2>បង្កើតគណនី</h2>
+    <input type="text" id="name" placeholder="ឈ្មោះពេញ" autocomplete="off">
+    <input type="email" id="email" placeholder="អាសយដ្ឋាន Email" autocomplete="off">
+    <input type="text" id="phone" placeholder="លេខទូរស័ព្ទ" autocomplete="off">
+    <input type="password" id="password" placeholder="ពាក្យសម្ងាត់" autocomplete="new-password">
+    <button onclick="handleRegister()">ចុះឈ្មោះឥឡូវនេះ</button>
+    <p class="login-link">
+        មានគណនីរួចហើយមែនទេ? <a th:href="@{/login}">ចូលប្រើប្រាស់នៅទីនេះ</a>
+    </p>
+</div>
+
+<script>
+    async function handleRegister() {
+        const voterData = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            password: document.getElementById('password').value
+        };
+
+        if (!voterData.name || !voterData.email || !voterData.password) {
+            alert("សូមបំពេញព័ត៌មានឱ្យបានគ្រប់គ្រាន់!");
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(voterData)
+            });
+
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.includes("text/html")) {
+                alert("សូមចូលប្រើប្រាស់ប្រព័ន្ធជាមុនសិន ឬឆែក SecurityConfig!");
+                window.location.href = "/login";
+                return;
+            }
+
+            const result = await response.json();
+            if (response.ok) {
+                alert(result.message);
+                window.location.href = "/verify";
+            } else {
+                alert("Error: " + result.error);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("មិនអាចតភ្ជាប់ទៅកាន់ Server បានទេ!");
+        }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        const passwordInput = document.getElementById('password');
+        if (passwordInput) {
+            passwordInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    handleRegister();
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
