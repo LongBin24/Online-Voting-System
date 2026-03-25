@@ -14,4 +14,8 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long> {
             "GROUP BY c.id, c.name, c.party " +
             "ORDER BY COUNT(v.id) DESC")
     List<CandidateResult> getVotingResults();
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 37ad4674341e5aa8f3d45a1fb0f09801471bd402

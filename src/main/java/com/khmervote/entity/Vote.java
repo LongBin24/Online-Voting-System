@@ -25,4 +25,9 @@ public class Vote {
 
     @Column(name = "vote_timestamp")
     private LocalDateTime voteTimestamp = LocalDateTime.now();
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 37ad4674341e5aa8f3d45a1fb0f09801471bd402
 }
